@@ -13,7 +13,7 @@ app = Flask(__name__)
 # Gemini API 설정 (Vercel 환경변수 사용)
 API_KEY = os.getenv("GEMINI_API_KEY", "")
 GEMINI_MODEL = "gemini-2.5-flash"
-DEFAULT_SENSOR_ANALYSIS_INTERVAL_MIN = 3
+DEFAULT_SENSOR_ANALYSIS_INTERVAL_MIN = 5  # 보관소 특성에 맞춰 기본 주기 5분으로 조정
 
 # 최신 센서 데이터를 메모리에 보관
 _latest: dict = {}
@@ -64,15 +64,17 @@ def _due_seconds(last_iso: str | None, interval_sec: int) -> int:
 
 
 def _decide_motors(temp: float, hum: float) -> tuple[bool, bool]:
-    # 간단한 안전 규칙: 고온이면 팬 ON, 저습이면 펌프 ON
-    fan_on = temp >= 28.0
-    pump_on = hum <= 45.0
+    # 프리미엄 주류 보관 규칙: 
+    # 고온(22°C 이상)이면 변질 방지를 위해 송풍 공조기(fan) ON
+    # 저습(55% 이하)이면 코르크 건조 방지를 위해 가습 펌프(pump) ON
+    fan_on = temp >= 22.0
+    pump_on = hum <= 55.0
     return fan_on, pump_on
 
 
 def _build_fallback_result(temp: float, hum: float, reason: str) -> str:
     fan_on, pump_on = _decide_motors(temp, hum)
-    advice = "환기유지, 과습주의"
+    advice = "온도안정, 코르크보호"
     if len(advice) > 20:
         advice = advice[:20]
     return json.dumps(
@@ -110,13 +112,14 @@ def _call_gemini_with_image(prompt: str, image_bytes: bytes, mime_type: str) -> 
 
 
 def _build_image_prompt(question: str, temp, hum) -> str:
-    q = (question or "현재 식물 상태를 진단하고 관리 방법을 알려줘").strip()
+    q = (question or "현재 보관 중인 주류의 상태와 진열 환경을 분석해줘").strip()
     sensor_hint = ""
     if temp is not None and hum is not None:
-        sensor_hint = f" 참고 센서값: temperature={temp}, humidity={hum}."
+        sensor_hint = f" 참고 셀러 센서값: 내온={temp}°C, 내습={hum}%."
     return (
-        "당신은 식물 생육 상태를 판단하는 전문가입니다. "
-        "업로드된 식물 사진을 보고 질문에 답하세요. "
+        "당신은 프리미엄 위스키와 와인을 관리하는 전문 소물리에이자 주류 보관 마스터입니다. "
+        "업로드된 스마트 셀러 내부의 주류 사진을 보고 사용자의 질문에 전문적으로 답하세요. "
+        "주류 라벨의 가독성, 코르크의 밀봉 상태, 빛 노출이나 침전물 발생 위험 등을 종합 고려하세요. "
         f"질문: {q}."
         f"{sensor_hint}"
     )
@@ -207,7 +210,7 @@ def sensor():
             }
         )
 
-        print(f"[센서] 온도: {temp_f}, 습도: {hum_f}")
+        print(f"[보관소 센서] 온도: {temp_f}, 습도: {hum_f}")
 
         interval_min = _to_int(_settings.get("sensor_analysis_interval_min"), DEFAULT_SENSOR_ANALYSIS_INTERVAL_MIN)
         due_in_sec = _due_seconds(_latest.get("analysis_timestamp"), interval_min * 60)
@@ -224,11 +227,13 @@ def sensor():
             )
 
         prompt = (
-            "아래 규칙을 반드시 지켜 한 줄 JSON만 출력하세요. "
-            "추가 설명/코드블록/개행 금지. "
-            f"입력값: temperature={temp_f}, humidity={hum_f}. "
-            "출력 스키마: {\"fan\":\"ON|OFF\",\"pump\":\"ON|OFF\",\"advice\":\"20자 이내\"}. "
-            "advice는 한국어 20자 이내로 작성하세요."
+            "당신은 스마트 주류 보관소(위스키 및 와인 셀러)의 인버터 환경 공조 제어 시스템입니다. "
+            "아래 규칙을 반드시 지켜 단 한 줄의 JSON 블록만 출력하세요. "
+            "마크다운 코드블록(```), 백틱, 불필요한 공백, 추가 설명이나 개행은 절대 금지합니다. "
+            f"현재 계측 데이터: temperature={temp_f}, humidity={hum_f}. "
+            "출력 JSON 스키마: {\"fan\":\"ON|OFF\",\"pump\":\"ON|OFF\",\"advice\":\"20자 이내\"}. "
+            "위스키 숙성 가스 정체 및 와인 고온 변질 방지를 판단하여 fan(송풍기)을 제어하고, 코르크 건조 방지를 위해 pump(가습기)를 제어하세요. "
+            "advice는 보관 최적화 팁을 한국어 20자 이내로 간결하게 작성하세요."
         )
 
         result = ""
@@ -245,7 +250,7 @@ def sensor():
         if not result:
             result = _build_fallback_result(temp_f, hum_f, ai_error or "unknown")
 
-        print(f"[AI 응답] {result}")
+        print(f"[AI 분석 응답] {result}")
 
         # 최신 데이터 저장 (대시보드 표시용)
         _latest.update(
@@ -274,6 +279,7 @@ def sensor():
 
 @app.route("/plant-image", methods=["POST"])
 def plant_image():
+    # ESP32-CAM 등 하드웨어 펌웨어 소스 코드의 엔드포인트명(/plant-image) 하위 호환 유지
     try:
         if "image" not in request.files:
             return jsonify({"error": "multipart form-data field 'image' is required"}), 400
@@ -306,7 +312,7 @@ def plant_image():
         return jsonify({"ok": True, "timestamp": now_iso, "message": "image_saved"})
 
     except Exception as e:
-        print("[plant-image] 에러:", e)
+        print("[cellar-image] 에러:", e)
         return jsonify({"error": str(e)}), 500
 
 
@@ -314,7 +320,7 @@ def plant_image():
 def analyze_image():
     try:
         if "image_b64" not in _latest_image or "mime_type" not in _latest_image:
-            return jsonify({"error": "latest image not found"}), 400
+            return jsonify({"error": "latest cellar image not found"}), 400
 
         body = request.get_json(silent=True) or {}
         question = body.get("question", "")

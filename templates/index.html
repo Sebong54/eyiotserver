@@ -3,33 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>라벤더 정원 모니터</title>
+  <title>더 케이브 : 홈 바 보관소 모니터</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Noto+Sans+KR:wght@300;400;600&display=swap');
 
     :root {
-      --lavender-deep:   #5c3d8f;
-      --lavender-mid:    #9b72cf;
-      --lavender-light:  #c9a7eb;
-      --lavender-pale:   #ede0f7;
-      --lavender-mist:   #f7f0ff;
-      --green-stem:      #7a9e7e;
+      --bg-dark:         #120e0b;
+      --amber-deep:      #8c531d;
+      --amber-mid:       #e5a93c;
+      --amber-light:     #f3d393;
+      --amber-glow:      rgba(229, 169, 60, 0.2);
+      --wood-dark:       #2c1a11;
+      --text-light:      #eadecf;
       --white:           #ffffff;
-      --shadow:          rgba(92, 61, 143, 0.18);
+      --shadow:          rgba(0, 0, 0, 0.5);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background: linear-gradient(160deg, #e8d5f5 0%, #d4b8f0 30%, #c9a7eb 60%, #b090d8 100%);
+      background: linear-gradient(135deg, #1a1410 0%, #120e0b 50%, #0a0806 100%);
+      color: var(--text-light);
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* ── 라벤더 꽃 배경 ── */
-    .flowers-bg {
+    /* ── 위스키 엔젤스 셰어 (숙성 연기 배경) ── */
+    .ambience-bg {
       position: fixed;
       inset: 0;
       pointer-events: none;
@@ -37,43 +39,19 @@
       overflow: hidden;
     }
 
-    .stem {
+    .vapor {
       position: absolute;
-      bottom: 0;
-      width: 3px;
-      background: var(--green-stem);
-      border-radius: 2px;
+      bottom: -20px;
+      background: radial-gradient(circle, rgba(229,169,60,0.08) 0%, rgba(0,0,0,0) 70%);
+      border-radius: 50%;
       transform-origin: bottom center;
-      animation: sway 4s ease-in-out infinite;
-    }
-    .stem::before {
-      content: '';
-      position: absolute;
-      top: -28px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 8px;
-      height: 30px;
-      background: radial-gradient(ellipse at center, var(--lavender-mid) 30%, var(--lavender-deep) 100%);
-      border-radius: 50% 50% 40% 40%;
-      box-shadow: 0 0 6px var(--lavender-light);
-    }
-    .stem::after {
-      content: '';
-      position: absolute;
-      top: -42px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 6px;
-      height: 18px;
-      background: radial-gradient(ellipse at center, var(--lavender-light) 30%, var(--lavender-mid) 100%);
-      border-radius: 50% 50% 40% 40%;
-      box-shadow: 0 0 4px var(--lavender-pale);
+      animation: riseAndFade 6s ease-in-out infinite;
     }
 
-    @keyframes sway {
-      0%, 100% { transform: rotate(-3deg); }
-      50%       { transform: rotate(3deg);  }
+    @keyframes riseAndFade {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
     }
 
     /* ── 레이아웃 ── */
@@ -90,41 +68,43 @@
       margin-bottom: 40px;
     }
     header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      color: var(--lavender-deep);
-      text-shadow: 0 2px 12px var(--lavender-light);
-      letter-spacing: 0.03em;
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      color: var(--amber-mid);
+      text-shadow: 0 0 15px var(--amber-glow);
+      letter-spacing: 0.06em;
     }
     header p.subtitle {
       margin-top: 8px;
-      color: var(--lavender-deep);
+      color: var(--text-light);
       font-size: 0.9rem;
-      opacity: 0.75;
+      opacity: 0.6;
+      letter-spacing: 0.02em;
     }
 
-    /* ── 카드 ── */
+    /* ── 오크통 분위기 카드 ── */
     .card {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(155, 114, 207, 0.3);
-      border-radius: 20px;
+      background: rgba(44, 26, 17, 0.45);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(229, 169, 60, 0.2);
+      border-radius: 16px;
       padding: 28px 32px;
       margin-bottom: 24px;
-      box-shadow: 0 8px 32px var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 10px 30px var(--shadow);
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px var(--shadow);
+      transform: translateY(-2px);
+      border-color: rgba(229, 169, 60, 0.45);
+      box-shadow: 0 15px 40px rgba(229, 169, 60, 0.1);
     }
 
     .card-title {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 600;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--lavender-mid);
+      color: var(--amber-mid);
       margin-bottom: 16px;
       display: flex;
       align-items: center;
@@ -134,9 +114,9 @@
       content: '';
       display: inline-block;
       width: 6px; height: 6px;
-      background: var(--lavender-mid);
+      background: var(--amber-mid);
       border-radius: 50%;
-      box-shadow: 0 0 6px var(--lavender-light);
+      box-shadow: 0 0 8px var(--amber-light);
     }
 
     /* ── 센서 그리드 ── */
@@ -148,88 +128,97 @@
     @media (max-width: 480px) { .sensor-grid { grid-template-columns: 1fr; } }
 
     .sensor-item {
-      background: linear-gradient(135deg, var(--lavender-pale) 0%, rgba(201,167,235,0.35) 100%);
-      border-radius: 14px;
-      padding: 20px;
+      background: linear-gradient(135deg, rgba(44,26,17,0.6) 0%, rgba(20,15,12,0.8) 100%);
+      border: 1px solid rgba(229, 169, 60, 0.1);
+      border-radius: 12px;
+      padding: 24px 20px;
       text-align: center;
     }
     .sensor-label {
-      font-size: 0.78rem;
-      color: var(--lavender-deep);
-      opacity: 0.7;
-      margin-bottom: 6px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      opacity: 0.5;
+      margin-bottom: 8px;
     }
     .sensor-value {
-      font-size: clamp(2rem, 6vw, 2.8rem);
+      font-size: clamp(2.2rem, 6vw, 3rem);
       font-weight: 600;
-      color: var(--lavender-deep);
+      color: var(--amber-light);
       line-height: 1;
+      font-family: 'Cinzel', serif;
     }
     .sensor-unit {
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 300;
-      color: var(--lavender-mid);
+      color: var(--amber-mid);
       margin-left: 4px;
     }
 
-    /* ── AI 응답 ── */
+    /* ── AI 분석 ── */
     .ai-body {
       font-size: 0.92rem;
       line-height: 1.8;
-      color: #3d2a5e;
+      color: #dfd5ca;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    .plant-image-wrap {
+    .cellar-image-wrap {
       margin-top: 14px;
-      border-radius: 14px;
+      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(155, 114, 207, 0.35);
-      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(229, 169, 60, 0.2);
+      background: rgba(0,0,0,0.4);
     }
-    .plant-image {
+    .cellar-image {
       display: block;
       width: 100%;
       height: auto;
       max-height: 340px;
       object-fit: cover;
+      filter: sepia(20%) corporate;
     }
-    .plant-image-caption {
+    .cellar-image-caption {
       font-size: 0.76rem;
-      color: var(--lavender-deep);
-      opacity: 0.72;
+      color: var(--amber-mid);
+      opacity: 0.8;
       padding: 8px 10px;
-      border-top: 1px solid rgba(155, 114, 207, 0.2);
+      border-top: 1px solid rgba(229, 169, 60, 0.15);
+      background: rgba(20,15,12,0.5);
     }
 
     .ask-row {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 14px;
     }
     .ask-row input {
-      border: 1px solid rgba(155, 114, 207, 0.35);
-      border-radius: 10px;
-      padding: 10px 12px;
+      background: rgba(20, 15, 12, 0.7);
+      border: 1px solid rgba(229, 169, 60, 0.25);
+      border-radius: 8px;
+      padding: 12px;
       font-size: 0.88rem;
-      width: 100%;
+      color: var(--white);
+    }
+    .ask-row input:focus {
+      outline: none;
+      border-color: var(--amber-mid);
+      box-shadow: 0 0 10px var(--amber-glow);
     }
     .ask-row button {
-      border: 1px solid rgba(92, 61, 143, 0.5);
-      background: var(--lavender-deep);
-      color: #fff;
-      border-radius: 10px;
-      padding: 10px 14px;
+      border: 1px solid var(--amber-deep);
+      background: linear-gradient(to bottom, #b58133, #8c531d);
+      color: var(--white);
+      border-radius: 8px;
+      padding: 0 20px;
       cursor: pointer;
       font-size: 0.84rem;
       font-weight: 600;
+      transition: opacity 0.2s;
     }
-    .ask-row button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+    .ask-row button:hover { opacity: 0.9; }
+    .ask-row button:disabled { opacity: 0.4; cursor: not-allowed; }
 
     /* ── 상태 배지 ── */
     .status-bar {
@@ -245,81 +234,77 @@
       align-items: center;
       gap: 6px;
       font-size: 0.78rem;
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.6);
-      border: 1px solid rgba(155,114,207,0.3);
-      color: var(--lavender-deep);
-      font-weight: 600;
+      background: rgba(44, 26, 17, 0.5);
+      border: 1px solid rgba(229, 169, 60, 0.2);
+      color: var(--amber-light);
     }
     .dot {
       width: 8px; height: 8px;
       border-radius: 50%;
-      background: #8bc34a;
+      background: #cddc39;
       animation: pulse 2s infinite;
     }
-    .dot.stale { background: #e0a030; animation: none; }
-    .dot.loading { background: var(--lavender-mid); animation: pulse 0.8s infinite; }
+    .dot.stale { background: #ff5722; animation: none; }
+    .dot.loading { background: var(--amber-mid); animation: pulse 0.8s infinite; }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1;   box-shadow: 0 0 0 0 rgba(139,195,74,0.5); }
-      50%       { opacity: 0.6; box-shadow: 0 0 0 6px rgba(139,195,74,0);  }
+      0%, 100% { opacity: 1;   box-shadow: 0 0 0 0 rgba(229, 169, 60, 0.4); }
+      50%       { opacity: 0.6; box-shadow: 0 0 0 6px rgba(229, 169, 60, 0);  }
     }
 
     .last-update {
       font-size: 0.78rem;
-      color: var(--lavender-deep);
-      opacity: 0.65;
+      color: var(--text-light);
+      opacity: 0.5;
     }
 
     .settings-box {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       font-size: 0.76rem;
-      color: var(--lavender-deep);
-      background: rgba(255,255,255,0.65);
-      border: 1px solid rgba(155,114,207,0.3);
-      border-radius: 999px;
-      padding: 5px 8px;
+      color: var(--text-light);
+      opacity: 0.8;
     }
     .settings-box input {
-      width: 62px;
-      border: 1px solid rgba(155,114,207,0.35);
-      border-radius: 999px;
-      padding: 4px 8px;
-      font-size: 0.76rem;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(229,169,60,0.2);
+      color: var(--amber-light);
+      width: 55px;
+      border-radius: 4px;
+      padding: 4px;
       text-align: center;
-      color: var(--lavender-deep);
     }
     .settings-box button {
-      border: 1px solid rgba(92, 61, 143, 0.5);
-      background: var(--lavender-deep);
-      color: #fff;
-      border-radius: 999px;
+      border: 1px solid rgba(229,169,60,0.3);
+      background: rgba(44, 26, 17, 0.8);
+      color: var(--amber-mid);
+      border-radius: 4px;
       padding: 4px 10px;
       font-size: 0.72rem;
       cursor: pointer;
     }
 
-    /* ── 로딩 플레이스홀더 ── */
+    /* ── 로딩 스켈레톤 ── */
     .skeleton {
-      background: linear-gradient(90deg,
-        rgba(201,167,235,0.25) 25%,
-        rgba(201,167,235,0.55) 50%,
-        rgba(201,167,235,0.25) 75%);
+      background: linear-gradient(90deg, 
+        rgba(44,26,17,0.3) 25%, 
+        rgba(140,83,29,0.2) 50%, 
+        rgba(44,26,17,0.3) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
-      border-radius: 8px;
-      height: 1em;
-      margin: 4px 0;
+      border-radius: 4px;
+      height: 1.1em;
+      margin: 6px 0;
     }
     @keyframes shimmer {
       0%   { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
 
-    /* ── 모터 상태 태그 ── */
+    /* ── 공조 기기 제어 상태 태그 ── */
     .motor-row {
       display: flex;
       gap: 12px;
@@ -327,123 +312,127 @@
       margin-top: 12px;
     }
     .motor-tag {
-      padding: 6px 16px;
-      border-radius: 999px;
+      padding: 8px 18px;
+      border-radius: 6px;
       font-size: 0.82rem;
       font-weight: 600;
-      border: 2px solid transparent;
+      border: 1px solid transparent;
+      letter-spacing: 0.03em;
     }
-    .motor-tag.on  { background: #e8f5e9; border-color: #66bb6a; color: #2e7d32; }
-    .motor-tag.off { background: var(--lavender-pale); border-color: var(--lavender-light); color: var(--lavender-deep); }
+    .motor-tag.on  { background: rgba(229,169,60,0.15); border-color: var(--amber-mid); color: var(--amber-light); box-shadow: 0 0 10px rgba(229,169,60,0.1); }
+    .motor-tag.off { background: rgba(20,15,12,0.6); border-color: rgba(229,169,60,0.15); color: var(--text-light); opacity: 0.4; }
 
     footer {
       text-align: center;
       font-size: 0.75rem;
-      color: var(--lavender-deep);
-      opacity: 0.5;
-      margin-top: 40px;
+      font-family: 'Cinzel', serif;
+      color: var(--amber-mid);
+      opacity: 0.3;
+      margin-top: 60px;
+      letter-spacing: 0.1em;
     }
   </style>
 </head>
 <body>
 
-<!-- 라벤더 꽃 배경 (JS로 생성) -->
-<div class="flowers-bg" id="flowersBg"></div>
+<!-- 아지랑이 연기 배경 생성 환경 -->
+<div class="ambience-bg" id="ambienceBg"></div>
 
 <div class="container">
   <header>
-    <h1>🌿 라벤더 정원 모니터</h1>
-    <p class="subtitle">ESP32 실시간 환경 센서 &amp; AI 생육 분석</p>
+    <h1>THE CAVE</h1>
+    <p class="subtitle">스마트 프리미엄 주류 보관소 &bull; 실시간 환경 모니터링</p>
   </header>
 
-  <!-- 상태 바 -->
+  <!-- 상태 관리 바 -->
   <div class="status-bar">
     <div class="badge">
       <span class="dot loading" id="dotEl"></span>
-      <span id="statusText">연결 중...</span>
+      <span id="statusText">셀러 동기화 중...</span>
     </div>
-    <span class="last-update" id="lastUpdateEl">마지막 업데이트: —</span>
+    <span class="last-update" id="lastUpdateEl">마지막 동기화: —</span>
     <div class="settings-box">
-      <span>센서 Gemini 주기(분)</span>
-      <input id="intervalInput" type="number" min="1" max="120" value="3" />
-      <button id="intervalBtn" type="button">적용</button>
+      <span>AI 분석 주기</span>
+      <input id="intervalInput" type="number" min="1" max="120" value="5" />
+      <span>분</span>
+      <button id="intervalBtn" type="button">변경</button>
     </div>
   </div>
 
-  <!-- 센서 카드 -->
+  <!-- 환경 센서 카드 -->
   <div class="card">
-    <div class="card-title">ESP32 센서 데이터 (5분 주기)</div>
+    <div class="card-title">저장고 실시간 상태 계측 (ESP32)</div>
     <div class="sensor-grid">
       <div class="sensor-item">
-        <div class="sensor-label">온도</div>
+        <div class="sensor-label">저장고 내부 온도</div>
         <div class="sensor-value" id="tempEl">—<span class="sensor-unit">°C</span></div>
       </div>
       <div class="sensor-item">
-        <div class="sensor-label">습도</div>
+        <div class="sensor-label">실내 상대 습도</div>
         <div class="sensor-value" id="humEl">—<span class="sensor-unit">%</span></div>
       </div>
     </div>
   </div>
 
-  <!-- 모터 상태 카드 -->
+  <!-- 제어기 가동 현황 카드 -->
   <div class="card">
-    <div class="card-title">모터 제어 상태</div>
+    <div class="card-title">인버터 및 공조 설비 제어 상태</div>
     <div class="motor-row" id="motorRow">
-      <span class="motor-tag off" id="fanTag">🌀 선풍기: —</span>
-      <span class="motor-tag off" id="pumpTag">💧 물펌프: —</span>
+      <span class="motor-tag off" id="fanTag">🌀 송풍 공조기: —</span>
+      <span class="motor-tag off" id="pumpTag">💧 습도 제어 펌프: —</span>
     </div>
   </div>
 
-  <!-- AI 분석 카드 -->
+  <!-- Gemini 숙성 환경 진단 -->
   <div class="card">
-    <div class="card-title">Gemini AI 생육 분석</div>
+    <div class="card-title">Gemini AI 숙성 환경 최적화 진단</div>
     <div class="ai-body" id="aiBody">
-      <div class="skeleton" style="width:80%"></div>
-      <div class="skeleton" style="width:65%"></div>
-      <div class="skeleton" style="width:72%"></div>
+      <div class="skeleton" style="width:85%"></div>
+      <div class="skeleton" style="width:70%"></div>
+      <div class="skeleton" style="width:78%"></div>
     </div>
   </div>
 
-  <!-- 식물 사진 분석 카드 -->
+  <!-- 보관 선반 이미지 관측 카드 -->
   <div class="card">
-    <div class="card-title">ESP32-CAM 이미지 / 수동 분석</div>
-    <div class="ai-body" id="plantBody">이미지는 자동 갱신됩니다. 분석은 버튼을 눌러 실행하세요.</div>
-    <div class="plant-image-wrap" id="plantImageWrap" style="display:none;">
-      <img id="plantImageEl" class="plant-image" alt="최신 식물 사진" />
-      <div class="plant-image-caption" id="plantImageCaption">최근 업로드 이미지</div>
+    <div class="card-title">셀러 내부 카메라 스캔 (ESP32-CAM)</div>
+    <div class="ai-body" id="plantBody">보관대 상태 데이터 수신 대기 중입니다.</div>
+    <div class="cellar-image-wrap" id="plantImageWrap" style="display:none;">
+      <img id="plantImageEl" class="cellar-image" alt="최신 저장고 내부 사진" />
+      <div class="cellar-image-caption" id="plantImageCaption">실시간 수립 이미지</div>
     </div>
     <div class="ask-row">
-      <input id="questionEl" type="text" placeholder="예: 잎이 건강한 상태인지 알려줘" />
-      <button id="askBtn" type="button">Gemini 질문</button>
+      <input id="questionEl" type="text" placeholder="예: 와인 코르크 건조 상태나 침전물 발생 여부 점검해줘" />
+      <button id="askBtn" type="button">분석 요청</button>
     </div>
   </div>
 
-  <footer>라벤더 정원 IoT 모니터 &bull; ESP32 + Flask + Gemini AI</footer>
+  <footer>THE CAVE SMART CELLAR SYSTEM &bull; ESP32 + FLASK + GEMINI AI</footer>
 </div>
 
 <script>
-  // ── 라벤더 꽃 배경 생성 ──
-  (function buildFlowers() {
-    const bg = document.getElementById('flowersBg');
-    const count = Math.max(18, Math.floor(window.innerWidth / 55));
+  // ── 아지랑이(엔젤스 셰어) 이펙트 스크립트 ──
+  (function buildAmbience() {
+    const bg = document.getElementById('ambienceBg');
+    const count = 12; // 은은함을 위해 적절한 개수 유지
     for (let i = 0; i < count; i++) {
-      const stem = document.createElement('div');
-      stem.className = 'stem';
-      const h = 80 + Math.random() * 100;
-      const delay = (Math.random() * 4).toFixed(2);
-      const dur   = (3.5 + Math.random() * 2).toFixed(2);
-      stem.style.cssText = `
-        left: ${(i / count * 100) + (Math.random() * 4 - 2)}%;
-        height: ${h}px;
+      const vapor = document.createElement('div');
+      vapor.className = 'vapor';
+      const size = 150 + Math.random() * 200;
+      const delay = (Math.random() * 6).toFixed(2);
+      const dur   = (5 + Math.random() * 4).toFixed(2);
+      vapor.style.cssText = `
+        left: ${Math.random() * 100}%;
+        width: ${size}px;
+        height: ${size}px;
         animation-delay: ${delay}s;
         animation-duration: ${dur}s;
-        opacity: ${0.45 + Math.random() * 0.45};
       `;
-      bg.appendChild(stem);
+      bg.appendChild(vapor);
     }
   })();
 
-  // ── 유틸 ──
+  // ── 데이터 맵핑 유틸 (기존 변수명 및 API 완벽 호환) ──
   const $ = id => document.getElementById(id);
   const dotEl       = $('dotEl');
   const statusText  = $('statusText');
@@ -464,50 +453,35 @@
 
   function setStatus(state) {
     dotEl.className = 'dot ' + state;
-    statusText.textContent = state === 'loading' ? '데이터 불러오는 중...'
-                           : state === 'stale'   ? '데이터 없음 (대기 중)'
-                                                 : '연결됨';
+    statusText.textContent = state === 'loading' ? '데이터 갱신 중...'
+                           : state === 'stale'   ? '동기화 실패 (센서 확인 필요)'
+                                                 : '보관소 안전 연결됨';
   }
 
   function formatTime(isoStr) {
     if (!isoStr) return '—';
     try {
       return new Date(isoStr).toLocaleString('ko-KR', {
-        year: 'numeric', month: '2-digit', day: '2-digit',
         hour: '2-digit', minute: '2-digit', second: '2-digit'
       });
     } catch { return isoStr; }
   }
 
   function updateMotorTags(text) {
-    // JSON 블록에서 fan/pump 값 추출 시도
     const fanMatch  = text.match(/"?fan(?:_motor)?"?\s*:\s*"?(on|off|true|false|1|0)"?/i);
     const pumpMatch = text.match(/"?(?:water_?)?pump(?:_motor)?"?\s*:\s*"?(on|off|true|false|1|0)"?/i);
-
     const isOn = v => v && /on|true|1/i.test(v);
 
     const fanOn  = fanMatch  ? isOn(fanMatch[1])  : null;
     const pumpOn = pumpMatch ? isOn(pumpMatch[1]) : null;
 
     if (fanOn !== null) {
-      fanTag.textContent = '🌀 선풍기: ' + (fanOn ? 'ON' : 'OFF');
+      fanTag.textContent = '🌀 송풍 공조기: ' + (fanOn ? 'RUNNING' : 'STANDBY');
       fanTag.className   = 'motor-tag ' + (fanOn ? 'on' : 'off');
     }
     if (pumpOn !== null) {
-      pumpTag.textContent = '💧 물펌프: ' + (pumpOn ? 'ON' : 'OFF');
+      pumpTag.textContent = '💧 습도 제어 펌프: ' + (pumpOn ? 'RUNNING' : 'STANDBY');
       pumpTag.className   = 'motor-tag ' + (pumpOn ? 'on' : 'off');
-    }
-  }
-
-  function parseJsonBlock(text) {
-    if (!text || typeof text !== 'string') return null;
-    const start = text.indexOf('{');
-    const end   = text.lastIndexOf('}');
-    if (start < 0 || end <= start) return null;
-    try {
-      return JSON.parse(text.slice(start, end + 1));
-    } catch {
-      return null;
     }
   }
 
@@ -519,14 +493,13 @@
       if (data.sensor_analysis_interval_min != null) {
         intervalInput.value = Number(data.sensor_analysis_interval_min);
       }
-    } catch (_) {
-    }
+    } catch (_) {}
   }
 
   async function applySettings() {
     try {
       intervalBtn.disabled = true;
-      const minutes = Number(intervalInput.value || 3);
+      const minutes = Number(intervalInput.value || 5);
       const res = await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -534,8 +507,7 @@
       });
       if (!res.ok) return;
       await fetchLatest();
-    } catch (_) {
-    } finally {
+    } catch (_) {} finally {
       intervalBtn.disabled = false;
     }
   }
@@ -553,14 +525,14 @@
 
       plantImageEl.src = `data:${data.mime_type};base64,${data.image_b64}`;
       const ts = data.timestamp ? formatTime(data.timestamp) : '시간 정보 없음';
-      plantImageCaption.textContent = `최근 업로드 이미지 (${ts})`;
+      plantImageCaption.textContent = `셀러 내부 관측 스냅샷 (${ts})`;
       plantImageWrap.style.display = 'block';
 
       if (data.plant_result) {
         plantBody.textContent = data.plant_result;
       }
     } catch (err) {
-      console.error('[image fetch error]', err);
+      console.error(err);
       plantImageWrap.style.display = 'none';
     }
   }
@@ -568,26 +540,24 @@
   async function analyzeImageNow() {
     try {
       askBtn.disabled = true;
-      plantBody.textContent = 'Gemini 분석 요청 중...';
+      plantBody.textContent = 'Gemini가 주류 라벨 및 보관 상태를 분석 중입니다...';
       const res = await fetch('/api/analyze-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: (questionEl.value || '').trim() })
       });
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || ('HTTP ' + res.status));
-      }
-      plantBody.textContent = data.result || '(분석 결과 없음)';
+      if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+      
+      plantBody.textContent = data.result || '(분석 결과 요약 없음)';
       await fetchLatestImage();
     } catch (err) {
-      plantBody.textContent = `분석 실패: ${err.message}`;
+      plantBody.textContent = `스캔 실패: ${err.message}`;
     } finally {
       askBtn.disabled = false;
     }
   }
 
-  // ── 데이터 fetch ──
   async function fetchLatest() {
     setStatus('loading');
     try {
@@ -599,18 +569,16 @@
         setStatus('stale');
         tempEl.innerHTML = '—<span class="sensor-unit">°C</span>';
         humEl.innerHTML  = '—<span class="sensor-unit">%</span>';
-        aiBody.textContent = 'ESP32에서 아직 데이터가 수신되지 않았습니다.';
+        aiBody.textContent = 'ESP32 단말기로부터 저장고 환경 데이터가 들어오지 않았습니다.';
         lastUpdate.textContent = '마지막 업데이트: —';
         await fetchLatestImage();
         return;
       }
 
-      // 센서 값
       tempEl.innerHTML = `${parseFloat(data.temperature).toFixed(1)}<span class="sensor-unit">°C</span>`;
       humEl.innerHTML  = `${parseFloat(data.humidity).toFixed(1)}<span class="sensor-unit">%</span>`;
 
-      // AI 응답
-      const resultText = data.result || '(응답 없음)';
+      const resultText = data.result || '(진단서 공백)';
       aiBody.textContent = resultText;
       updateMotorTags(resultText);
 
@@ -618,21 +586,19 @@
         plantBody.textContent = data.plant_result;
       }
 
-      // 시간
       const due = Number(data.analysis_due_in_sec || 0);
-      const iv = Number(data.sensor_analysis_interval_min || intervalInput.value || 3);
+      const iv = Number(data.sensor_analysis_interval_min || intervalInput.value || 5);
       intervalInput.value = iv;
-      lastUpdate.textContent = '마지막 업데이트: ' + formatTime(data.timestamp) + ` | 다음 분석 ${due}초`;
+      lastUpdate.textContent = '정상 동기화: ' + formatTime(data.timestamp) + ` | 차기 진단 판단까지 ${due}초`;
       setStatus('');
       await fetchLatestImage();
     } catch (err) {
       setStatus('stale');
-      console.error('[fetch error]', err);
+      console.error(err);
       plantImageWrap.style.display = 'none';
     }
   }
 
-  // 최초 로드 + 30초마다 갱신
   askBtn.addEventListener('click', analyzeImageNow);
   intervalBtn.addEventListener('click', applySettings);
   loadSettings();
